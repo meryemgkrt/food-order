@@ -1,9 +1,18 @@
-import React from 'react'
+import Head from 'next/head';
+import '../styles/globals.css';
+import Home from './home/Index';
 
-const index = () => {
+
+export default function App({ Component, pageProps }) {
   return (
-    <div className='bg-white text-black'>merhaba</div>
-  )
+    <>
+      <Head>
+        <link
+          href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400..700&family=Electrolize&display=swap"
+          rel="stylesheet"
+        />
+      </Head>
+      <Home/>
+    </>
+  );
 }
-
-export default index
