@@ -1,9 +1,19 @@
-import React from 'react'
+import Head from 'next/head';
+import '../styles/globals.css';
+import Home from './home/Index';
+import Header from '@/components/layout/Header';
 
-const index = () => {
+
+
+export default function App({ Component, pageProps }) {
   return (
-    <div className='bg-white text-black'>merhaba</div>
-  )
+    <>
+      <Head>
+       
+      </Head>
+      <Header/>
+    
+      <Home/>
+    </>
+  );
 }
-
-export default index
