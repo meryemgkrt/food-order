@@ -2,6 +2,7 @@ import Head from 'next/head';
 import '../styles/globals.css';
 import Home from './home/Index';
 import Header from '@/components/layout/Header';
+import  Input  from '@/components/form/Input';
 
 
 
@@ -14,6 +15,8 @@ export default function App({ Component, pageProps }) {
       <Header/>
     
       <Home/>
+   
+      
     </>
   );
 }

@@ -11,7 +11,7 @@ const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const router = useRouter();
-  console.log("router", router.asPath);
+ 
 
   useEffect(() => {
     const handleResize = () => {
@@ -27,17 +27,20 @@ const Header = () => {
   return (
     <div className="relative">
       {/* Header */}
-      <div className={`h-[88px] relative px-4 md:px-6 flex items-center ${router.asPath === '/' ? 'bg-transparent' : 'bg-secondary'} transition-all z-40`}>
+      <div className={`h-[88px] relative px-4 md:px-6 flex items-center  ${router.asPath === '/' ? 'bg-transparent' : 'bg-dark'} transition-all z-40`}>
         <div className="container mx-auto text-white flex justify-between items-center h-full">
           {/* Left Section - Burger Icon and Logo */}
-          <div className="flex items-center gap-x-4">
+          <div className="flex items-center gap-x-8">
             <button
               onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className="sm:hidden inline-block -ml-3"
+              className="sm:hidden inline-block -ml-12"
             >
               <GiHamburgerMenu className="text-xl hover:text-primary transition-all" />
             </button>
-            <Logo className="" />
+           
+          </div>
+          <div className="flex items-center md:gap-x-8 lg:-ml-12">
+          <Logo className="" />
           </div>
 
           {/* Navigation */}
@@ -100,7 +103,7 @@ const Header = () => {
             </button>
             <a href="#" className="inline-block">
               <button className="bg-primary btn text-white w-full font-sans px-4 md:px-6 py-1 text-sm md:text-base rounded-full">
-                Order Now
+                Order Online
               </button>
             </a>
           </div>

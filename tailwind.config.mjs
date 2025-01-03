@@ -43,6 +43,10 @@ export default {
           800: "#71081b", // Daha koyu kırmızı
           900: "#4a0512", // En koyu kırmızı
         },
+        accentColor: {
+          primary: '#ffbe33', // Accent rengini tanımlayın
+          secondary: '#4CAF50',
+        },
         crimson: "#DC143C", // Kraliyet kırmızısı
         ruby: "#9B111E", // Yakut kırmızısı
         firebrick: "#B22222", // Tuğla kırmızısı
