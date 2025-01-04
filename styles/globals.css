@@ -27,6 +27,17 @@ html, body {
   @apply !m-0 !mt-8;
 }
 
+.date-input {
+  position: relative;
+  width: 100%;
+}
+
+.date-input::-webkit-calendar-picker-indicator {
+  position: absolute;
+  right: 0;
+  padding: 0;
+  cursor: pointer;
+}
 
 
 
