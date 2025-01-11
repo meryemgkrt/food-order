@@ -5,13 +5,13 @@ import { GiHamburgerMenu } from "react-icons/gi";
 import { IoIosCloseCircle } from "react-icons/io";
 import SearchModal from "../ui/SearchModal";
 import { useRouter } from "next/router";
+import Link from "next/link";
 
 const Header = () => {
   const [isOpenSearch, setIsOpenSearch] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const router = useRouter();
- 
 
   useEffect(() => {
     const handleResize = () => {
@@ -27,7 +27,11 @@ const Header = () => {
   return (
     <div className="relative">
       {/* Header */}
-      <div className={`h-[88px] relative px-4 md:px-6 flex items-center  ${router.asPath === '/' ? 'bg-transparent' : 'bg-dark'} transition-all z-40`}>
+      <div
+        className={`h-[88px] relative px-4 md:px-6 flex items-center  ${
+          router.asPath === "/" ? "bg-transparent" : "bg-secondary"
+        } transition-all z-40`}
+      >
         <div className="container mx-auto text-white flex justify-between items-center h-full">
           {/* Left Section - Burger Icon and Logo */}
           <div className="flex items-center gap-x-8">
@@ -37,58 +41,57 @@ const Header = () => {
             >
               <GiHamburgerMenu className="text-xl hover:text-primary transition-all" />
             </button>
-           
           </div>
           <div className="flex items-center md:gap-x-8 lg:-ml-12">
-          <Logo className="" />
+            <Logo className="" />
           </div>
 
           {/* Navigation */}
           <nav className="hidden sm:block">
             <ul className="flex items-center gap-x-3 text-center">
               <li className="px-5 py-3 uppercase">
-                <a
-                  href="#"
+                <Link
+                  href="/"
                   className="hover:underline hover:text-primary text-[14px] md:text-[16px] uppercase"
                 >
                   Home
-                </a>
+                </Link>
               </li>
               <li className="px-5 py-3 uppercase">
-                <a
-                  href="#"
+                <Link
+                  href="/menu"
                   className="hover:underline hover:text-primary text-[14px] md:text-[16px] uppercase"
                 >
                   Menu
-                </a>
+                </Link>
               </li>
               <li className="px-5 py-3 uppercase">
-                <a
-                  href="#"
+                <Link
+                  href="/about"
                   className="hover:underline hover:text-primary text-[14px] md:text-[16px] uppercase"
                 >
                   About
-                </a>
+                </Link>
               </li>
               <li className="px-5 py-3 uppercase">
-                <a
-                  href="#"
+                <Link
+                  href="/bookTable"
                   className="hover:underline hover:text-primary text-[14px] md:text-[16px] uppercase"
                 >
                   Book Table
-                </a>
+                </Link>
               </li>
             </ul>
           </nav>
 
           {/* Right Section - Icons and Button */}
           <div className="flex items-center gap-x-3 md:gap-x-4">
-            <a
-              href="#"
-              className="flex items-center justify-center px-2 py-2 md:px-3 md:py-2 rounded hover:text-primary"
+            <Link
+              href="/auth/login"
+              className="flex items-center cursor-pointer justify-center px-2 py-2 md:px-3 md:py-2 rounded hover:text-primary"
             >
               <FaUser />
-            </a>
+            </Link>
             <a
               href="#"
               className="flex items-center justify-center px-2 py-2 md:px-3 md:py-2 rounded hover:text-primary"
@@ -126,28 +129,28 @@ const Header = () => {
             {/* Navigation Links */}
             <ul className="flex flex-col items-start gap-y-4 p-4">
               <li>
-                <a href="#" className="text-lg hover:text-primary uppercase">
+                <Link href="/" className="text-lg hover:text-primary uppercase">
                   Home
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="#" className="text-lg hover:text-primary uppercase">
+                <Link href="/menu" className="text-lg hover:text-primary uppercase">
                   Menu
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="#" className="text-lg hover:text-primary uppercase">
+                <Link href="/about" className="text-lg hover:text-primary uppercase">
                   About
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="#" className="text-lg hover:text-primary uppercase">
+                <Link href="/bookTable" className="text-lg hover:text-primary uppercase">
                   Book Table
-                </a>
+                </Link>
               </li>
               <li>
                 <button className="text-lg hover:text-primary uppercase">
-                  Order 
+                  Order
                 </button>
               </li>
             </ul>
