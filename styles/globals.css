@@ -64,6 +64,10 @@ html, body {
 .scrollbar-custom::-webkit-scrollbar-thumb:hover {
   background: #222831; /* Hover rengi */
 }
+.table-auto th {
+  min-width: 100px; /* veya uygun gördüğünüz herhangi bir değer */
+}
+
 
 
 

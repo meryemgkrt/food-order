@@ -19,6 +19,8 @@ const About = () => {
 
         {/* Yazı ve Buton Alanı */}
         <div className="md:w-1/2 w-full text-white">
+         
+         .
           <Title className="text-center  font-dancing text-4xl font-bold text-primary mb-8">
             We Are Feane
           </Title>

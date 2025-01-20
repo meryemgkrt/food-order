@@ -1,37 +1,38 @@
-import Title from "@/components/ui/Title";
-import { useFormik } from "formik";
-import validationSchema from "@/schema/validationSchema";
 import LoginInput from "@/components/form/LoginInput";
-import { FaGithub } from "react-icons/fa";
-import Link from "next/link";
+import Title from "@/components/ui/Title";
+import userSchema from "@/schema/adminSchema";
 
-const Login = () => {
+import { useFormik } from "formik";
+import Link from "next/link";
+import React from "react";
+
+import adminSchema from "@/schema/adminSchema";
+const index = () => {
   const onSubmit = async (values, actions) => {
     console.log("Submitted Values:", values);
     await new Promise((resolve) => setTimeout(resolve, 600));
     actions.resetForm();
   };
-  const handleClick = () => {
-    window.location.href = "https://github.com/login";
-  };
 
   const formik = useFormik({
     initialValues: {
-      email: "",
+      username: "",
       password: "",
     },
-    onSubmit: onSubmit, // Burada `onSubmit` eklenmiştir
-    validationSchema: validationSchema,
+    validationSchema: adminSchema,
+    onSubmit: (values) => {
+      console.log("Submitted values:", values);
+    },
   });
 
   const inputs = [
     {
       id: 1,
-      type: "email",
-      name: "email",
-      placeholder: "Enter your email",
-      value: formik.values.email,
-      error: formik.touched.email && formik.errors.email,
+      type: "text",
+      name: "username",
+      placeholder: "Enter your userName",
+      value: formik.values.userName,
+      error: formik.touched.username && formik.errors.username,
     },
     {
       id: 2,
@@ -42,12 +43,11 @@ const Login = () => {
       error: formik.touched.password && formik.errors.password,
     },
   ];
-
   return (
-    <div className="container mx-auto py-20">
+    <div className="container mx-auto py-1">
       <div className="flex flex-col justify-center items-center min-h-[60vh]">
         <Title className="text-center font-dancing font-bold text-primary text-[2.5rem]">
-          Login
+          Admin Login
         </Title>
         <form
           onSubmit={formik.handleSubmit}
@@ -68,7 +68,6 @@ const Login = () => {
           ))}
 
           {/* Login Button */}
-        
 
           <div className="flex flex-col gap-4">
             <button
@@ -77,16 +76,10 @@ const Login = () => {
             >
               Login
             </button>
-            <button
-              onClick={handleClick}
-              className="bg-secondary flex justify-center items-center gap-2 text-white px-6 py-3 rounded-full hover:bg-primary-dark transition"
-            >
-              <FaGithub className="text-lg" />
-              <span>Sign in with GitHub</span>
-            </button>
-            <Link href="/auth/register">
-              <span className="text-center text-secondary hover:text-clip  cursor-pointer hover:underline">
-                Don't have an account? Register
+
+            <Link href="/">
+              <span className="text-center justify-center flex items-center text-secondary hover:text-clip  cursor-pointer hover:underline">
+                Home Page
               </span>
             </Link>
           </div>
@@ -96,4 +89,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default index;

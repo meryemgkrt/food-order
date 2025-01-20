@@ -17,6 +17,7 @@ const Index = () => {
       <About/>
       <Reservation/>
       <Customer/>
+      
      
      
     </div>

@@ -92,12 +92,12 @@ const Header = () => {
             >
               <FaUser />
             </Link>
-            <a
-              href="#"
+            <Link
+              href="/cart"
               className="flex items-center justify-center px-2 py-2 md:px-3 md:py-2 rounded hover:text-primary"
             >
               <FaShoppingCart />
-            </a>
+            </Link>
             <button
               onClick={() => setIsOpenSearch(true)}
               className="flex items-center justify-center px-2 py-2 md:px-3 md:py-2 rounded hover:text-primary"
