@@ -18,7 +18,10 @@ const registerSchema = Yup.object({
  confirmPassword: Yup.string()
     .oneOf([Yup.ref("password")], "Passwords must match")
     .required("Confirm password is required"),
- 
+ phone: Yup.string().required("Phone is required"),
+  adress: Yup.string().required("Adress is required"),
+  job: Yup.string().required("Job is required").min(3, "Job must be at least 3 characters"),
+  bio: Yup.string().required("Bio is required").min(3, "Bio must be at least 3 characters"),
 });
 
 export default registerSchema;

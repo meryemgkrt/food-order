@@ -20,8 +20,8 @@ const LoginInput = ({
           onChange={onChange}
           onBlur={onBlur}
           placeholder=" " // Boş placeholder, stil amaçlı kullanılacak
-          className={`h-14 w-full border-2 outline-none rounded-lg appearance-none focus:ring-0 focus:border-primary px-4 peer ${
-            error ? "border-red-500" : "border-gray-300"
+          className={`h-14 w-full border-2 outline-none rounded-lg appearance-none focus:shadow-lg focus:ring-0 focus:border-primary px-4 peer ${
+            error ? "border-red-500" : "border-primary border-opacity-50 "
           }`}
         />
         <span

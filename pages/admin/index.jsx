@@ -1,38 +1,37 @@
-import LoginInput from "@/components/form/LoginInput";
 import Title from "@/components/ui/Title";
-import userSchema from "@/schema/adminSchema";
-
 import { useFormik } from "formik";
+import validationSchema from "@/schema/validationSchema";
+import LoginInput from "@/components/form/LoginInput";
+import { FaGithub } from "react-icons/fa";
 import Link from "next/link";
-import React from "react";
 
-import adminSchema from "@/schema/adminSchema";
-const index = () => {
+const Index = () => {
   const onSubmit = async (values, actions) => {
     console.log("Submitted Values:", values);
     await new Promise((resolve) => setTimeout(resolve, 600));
     actions.resetForm();
   };
+  const handleClick = () => {
+    window.location.href = "https://github.com/login";
+  };
 
   const formik = useFormik({
     initialValues: {
-      username: "",
+      email: "",
       password: "",
     },
-    validationSchema: adminSchema,
-    onSubmit: (values) => {
-      console.log("Submitted values:", values);
-    },
+    onSubmit: onSubmit, // Burada `onSubmit` eklenmiştir
+    validationSchema: validationSchema,
   });
 
   const inputs = [
     {
       id: 1,
-      type: "text",
-      name: "username",
-      placeholder: "Enter your userName",
-      value: formik.values.userName,
-      error: formik.touched.username && formik.errors.username,
+      type: "email",
+      name: "email",
+      placeholder: "Enter your email",
+      value: formik.values.email,
+      error: formik.touched.email && formik.errors.email,
     },
     {
       id: 2,
@@ -43,11 +42,12 @@ const index = () => {
       error: formik.touched.password && formik.errors.password,
     },
   ];
+
   return (
-    <div className="container mx-auto py-1">
+    <div className="container mx-auto py-20">
       <div className="flex flex-col justify-center items-center min-h-[60vh]">
         <Title className="text-center font-dancing font-bold text-primary text-[2.5rem]">
-          Admin Login
+     Order Login
         </Title>
         <form
           onSubmit={formik.handleSubmit}
@@ -76,10 +76,10 @@ const index = () => {
             >
               Login
             </button>
-
+           
             <Link href="/">
-              <span className="text-center justify-center flex items-center text-secondary hover:text-clip  cursor-pointer hover:underline">
-                Home Page
+              <span className="text-center text-secondary hover:text-clip  cursor-pointer hover:underline">
+              Home Page
               </span>
             </Link>
           </div>
@@ -89,4 +89,4 @@ const index = () => {
   );
 };
 
-export default index;
+export default Index;

@@ -26,7 +26,7 @@ export default {
         background: "var(--background)", // Tema desteği için
         foreground: "var(--foreground)", // Tema desteği için
         info: "#3ABFF8", // Bilgi mesajları için
-        success: "#36D399", // Başarılı işlemler için
+        success: "#00FF00", // Başarılı işlemler için
         warning: "#FBBD23", // Uyarılar için
         danger: "#F87272", // Hatalar için
       

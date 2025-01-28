@@ -43,7 +43,7 @@ const Footer = () => {
             <Title className="font-dancing text-center text-3xl md:text-2xl sm:text-xl text-primary mb-4">
               About Us
             </Title>
-            <p className="mt-2 text-[14px] sm:text-[12px] text-center">
+            <p className="mt-2 text-[21px] sm:text-[12px] leading-relaxed text-center">
               Necessary, making this the first true generator on the Internet.
               It uses a dictionary of over 200 Latin words, combined with.
             </p>
