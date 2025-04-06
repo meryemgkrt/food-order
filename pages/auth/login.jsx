@@ -22,26 +22,11 @@ const Login = () => {
     try {
       const res = await signIn("credentials", options);
       actions.resetForm();
+      push("/profile")
     } catch (err) {
       console.log(err);
     }
   };
-
-  useEffect(() => {
-    const getUser = async () => {
-      try {
-        const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/users`);
-        setCurrentUser(
-          res.data?.find((user) => user.email === session?.user?.email)
-        );
-        session && push("/profile/" );
-      } catch (err) {
-        console.log(err);
-      }
-    };
-    getUser();
-  }, [session, push, ]);
-
 
   const formik = useFormik({
     initialValues: {
@@ -127,20 +112,17 @@ const Login = () => {
   );
 };
 
-export const getServerSideProps = async (context) => {
-  const session = await getSession(context);
-  if (session) {
-    return {
-      redirect: {
-        destination: "/profile", // sadece /profile yönlendirmesi
-        permanent: false,
-      },
-    };
-  }
+export async function getServerSideProps({ req }) {
+  const session = await getSession({ req });
 
+  if (session) {
+    return { redirect: { destination: "/profile", permanent: false } };
+  }
   return {
-    props: {},
+    props: {
+      session,
+    },
   };
-};
+}
 
 export default Login;

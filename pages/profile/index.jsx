@@ -8,11 +8,12 @@ import Title from "@/components/ui/Title";
 import Acount from "@/components/profile/Acount";
 import Password from "@/components/profile/Password";
 import Order from "@/components/profile/Order";
-import { signOut, useSession } from "next-auth/react";
+import { getSession, signOut, useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 
 const Index = () => {
-  const { data: session, status } = useSession(); // ✅ TEK BİR KULLANIM
+
+  const { data: session, status } = useSession();
   const [tabs, setTabs] = useState(0);
   const { push } = useRouter();
 
@@ -22,13 +23,6 @@ const Index = () => {
       push("/auth/login");
     }
   };
-
-  useEffect(() => {
-    if (status === "loading") return; // Oturum yükleniyorsa bekle
-    if (status === "unauthenticated") {
-      push("/auth/login"); // Oturum yoksa login sayfasına yönlendir
-    }
-  }, [status, push]);
 
   if (status === "loading") {
     return <div className="text-center mt-20">Loading...</div>; // opsiyonel
@@ -103,5 +97,18 @@ const Index = () => {
     </div>
   );
 };
+
+export async function getServerSideProps({ req }) {
+  const session = await getSession({ req });
+
+  if (!session) {
+    return { redirect: { destination: "/auth/login", permanent: false } };
+  }
+  return {
+    props: {
+      session,
+    },
+  };
+}
 
 export default Index;
