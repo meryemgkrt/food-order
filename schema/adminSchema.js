@@ -8,12 +8,7 @@ const adminSchema = Yup.object().shape({
     .required('User name is required'), // Zorunlu alan
   password: Yup.string()
     .min(8, 'Password must be at least 8 characters') // Minimum uzunluk kontrolü
-    .max(20, 'Password must be at most 20 characters') // Maksimum uzunluk kontrolü
-    .matches(/[A-Z]/, 'Password must contain at least one uppercase letter') // Büyük harf kontrolü
-    .matches(/[a-z]/, 'Password must contain at least one lowercase letter') // Küçük harf kontrolü
-    .matches(/\d/, 'Password must contain at least one number') // Rakam kontrolü
-    .matches(/[@$!%*?&]/, 'Password must contain at least one special character (@, $, !, %, *, ?, &)') // Özel karakter kontrolü
-    .required('Password is required'), // Zorunlu alan
+   
 });
 
 export default adminSchema;

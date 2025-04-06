@@ -1,9 +1,8 @@
 import Title from "@/components/ui/Title";
 import Image from "next/image";
 import React, { useState } from "react";
-import addProductToCart from "../../redux/cartSlice";
-
-import { useDispatch } from "react-redux";
+import { addProductToCart } from "../../redux/cartSlice";
+import { useDispatch, useSelector } from "react-redux";
 
 const extras = [
   {
@@ -47,52 +46,7 @@ const foodItems = [
       },
     ],
   },
-  {
-    id: 2,
-    name: "Pizza 2",
-    price: 20,
-    desc: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-    extraOptions: [
-      {
-        id: 1,
-        name: "Extra 1",
-        price: 2,
-      },
-      {
-        id: 2,
-        name: "Extra 2",
-        price: 3,
-      },
-      {
-        id: 3,
-        name: "Extra 3",
-        price: 4,
-      },
-    ],
-  },
-  {
-    id: 3,
-    name: "Pizza 3",
-    price: 30,
-    desc: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-    extraOptions: [
-      {
-        id: 1,
-        name: "Extra 1",
-        price: 2,
-      },
-      {
-        id: 2,
-        name: "Extra 2",
-        price: 3,
-      },
-      {
-        id: 3,
-        name: "Extra 3",
-        price: 4,
-      },
-    ],
-  },
+  
 ];
 
 const Index = () => {
@@ -100,6 +54,8 @@ const Index = () => {
   const [price, setPrice] = useState(prices[0]);
   const [size, setSize] = useState(0);
   const [selectedExtras, setSelectedExtras] = useState([]);
+  const cart = useSelector((state) => state.cart);
+  
   const dispatch = useDispatch();
 
   const handleSizeChange = (sizeIndex) => {
@@ -125,25 +81,17 @@ const Index = () => {
   };
 
   const handleClick = () => {
-    if (!foodItems[0]) {
-      console.error("foodItems[0] undefined! Check your data.");
-      return;
-    }
+ dispatch(
+   addProductToCart({
+     ...foodItems[0],
+     extras: selectedExtras,
+     price,
+     quantity: 1,
+   })
+ );
 
-    if (!selectedExtras || !price) {
-      console.error("Selected extras or price is undefined!");
-      return;
-    }
-
-    dispatch(
-      addProductToCart({
-        ...foodItems[0],
-        selectedExtras,
-        price,
-        quantity: 1,
-      })
-    );
   };
+  console.log(cart);
 
   return (
     <div className="flex flex-col md:flex-row h-screen items-center justify-center gap-10 p-5">

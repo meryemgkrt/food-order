@@ -1,40 +1,49 @@
 import React from "react";
 
-const LoginInput = ({
-  type,
-  name,
-  value,
-  onChange,
-  onBlur,
-  placeholder,
-  error,
-}) => {
+const LoginInput = (props) => {
+  const { type, errorMessage, touched, placeholder, value, ...inputProps } =
+    props;
+
   return (
-    <div className="w-full relative">
-      <label className="relative block cursor-text w-full">
+    <div className="w-full">
+      <label className="relative block w-full cursor-text">
         <input
-          id={name}
           type={type}
-          name={name}
           value={value}
-          onChange={onChange}
-          onBlur={onBlur}
-          placeholder=" " // Boş placeholder, stil amaçlı kullanılacak
-          className={`h-14 w-full border-2 outline-none rounded-lg appearance-none focus:shadow-lg focus:ring-0 focus:border-primary px-4 peer ${
-            error ? "border-red-500" : "border-primary border-opacity-50 "
-          }`}
+          className={`h-14 w-full border-2 rounded-md px-4 text-base outline-none peer transition-all duration-200
+    ${type !== "datetime-local" && "pt-6"}
+    ${
+      touched && errorMessage
+        ? "border-red-500 focus:border-red-500"
+        : "border-gray-300 focus:border-primary"
+    }
+    focus:outline-none focus:ring-0
+  `}
+          placeholder=" "
+          required
+          {...inputProps}
         />
-        <span
-          className={`absolute top-0 left-0 px-4 text-sm flex items-center h-full text-gray-500 transition-all ${
-            value
-              ? "hidden" // Eğer inputta değer varsa placeholder'ı gizle
-              : "peer-placeholder-shown:h-full peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400 peer-focus:h-7 peer-focus:text-xs peer-focus:text-primary"
-          }`}
-        >
-          {placeholder}
-        </span>
+
+        {type !== "datetime-local" && (
+          <span
+            className={`absolute left-4 text-gray-500 text-sm transition-all duration-200 
+              peer-placeholder-shown:top-[20px]
+              peer-placeholder-shown:text-base 
+              peer-placeholder-shown:text-gray-400 
+              peer-focus:top-2 
+              peer-focus:text-xs 
+              peer-focus:text-primary
+              ${value ? "top-2 text-xs text-primary" : ""}
+            `}
+          >
+            {placeholder}
+          </span>
+        )}
       </label>
-      {error && <div className="text-red-500 text-sm mt-1">{error}</div>}
+
+      {touched && errorMessage && (
+        <p className="text-xs text-red-500 mt-1">{errorMessage}</p>
+      )}
     </div>
   );
 };

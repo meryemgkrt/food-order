@@ -1,16 +1,29 @@
-const handleClick = () => {
-  if (!foodItems[0]) {
-    console.error("foodItems[0] undefined! Check your data.");
-    return;
-  }
+// redux/cartSlice.js
+import { createSlice } from "@reduxjs/toolkit";
 
-  dispatch(
-    addProductToCart({
-      id: foodItems[0].id,
-      name: foodItems[0].name,
-      price: price,
-      extras: selectedExtras,
-      quantity: 1,
-    })
-  );
-};
+const cartSlice = createSlice({
+  name: "cart",
+  initialState: {
+    products: [],
+    quantity: 0,
+    total: 0,
+  },
+  reducers: {
+    addProductToCart: (state, action) => {
+      state.products.push(action.payload);
+      state.quantity += action.payload.quantity;
+      state.total += action.payload.price;
+    },
+    reset: (state) => {
+      state.products = [];
+      state.quantity = 0;
+      state.total = 0;
+    },
+  },
+});
+
+// Aksiyonları dışa aktar
+export const { addProductToCart, reset } = cartSlice.actions;
+
+// Reducer'ı dışa aktar
+export default cartSlice.reducer;

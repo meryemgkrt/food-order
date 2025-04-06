@@ -3,15 +3,35 @@ import React, { useState } from "react";
 import { BiCategory, BiExit } from "react-icons/bi";
 import { RiEBike2Line } from "react-icons/ri";
 import { MdFastfood } from "react-icons/md";
+import { FaRegWindowRestore } from "react-icons/fa6";
+import { useRouter } from "next/router";
+import axios from "axios";
+import { toast } from "react-toastify";
+import cookie from "cookie";
+
 import Title from "@/components/ui/Title";
 import Product from "@/components/admin/Product";
 import Orders from "@/components/admin/Orders";
 import Categories from "@/components/admin/Categories";
 import Footer from "@/components/admin/Footer";
-import { FaRegWindowRestore } from "react-icons/fa6";
 
-const profile = () => {
+const AdminProfile = () => {
   const [tabs, setTabs] = useState(0);
+  const router = useRouter();
+
+  const closeAdminAccount = async () => {
+    try {
+      if (confirm("Are you sure you want to close your Admin Account?")) {
+        const res = await axios.put(`${process.env.NEXT_PUBLIC_API_URL}/admin`);
+        if (res.status === 200) {
+          toast.success("Admin Account Closed!");
+          router.push("/admin");
+        }
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  };
 
   const tabList = [
     { id: 0, name: "Product", icon: <MdFastfood />, component: <Product /> },
@@ -59,7 +79,13 @@ const profile = () => {
           {tabList.map((tab) => (
             <li
               key={tab.id}
-              onClick={() => setTabs(tab.id)}
+              onClick={() => {
+                if (tab.name === "Exit") {
+                  closeAdminAccount();
+                } else {
+                  setTabs(tab.id);
+                }
+              }}
               className={`border-b-2 flex cursor-pointer items-center gap-2 w-full px-8 py-4 hover:bg-primary hover:text-white transition-all ${
                 tabs === tab.id ? "bg-primary text-white" : "text-black"
               }`}
@@ -77,4 +103,21 @@ const profile = () => {
   );
 };
 
-export default profile;
+export const getServerSideProps = (ctx) => {
+  const cookies = cookie.parse(ctx.req?.headers.cookie || "");
+
+  if (cookies.token !== process.env.ADMIN_TOKEN) {
+    return {
+      redirect: {
+        destination: "/admin",
+        permanent: false,
+      },
+    };
+  }
+
+  return {
+    props: {},
+  };
+};
+
+export default AdminProfile;

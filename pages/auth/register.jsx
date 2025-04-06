@@ -1,62 +1,79 @@
-import React from "react";
+import axios from "axios";
 import { useFormik } from "formik";
-import registerSchema from "@/schema/registerSchema";
+import Link from "next/link";
 import LoginInput from "@/components/form/LoginInput";
 import Title from "@/components/ui/Title";
-import Link from "next/link";
+import { registerSchema } from "@/schema/registerSchema";
+import { toast } from "react-toastify";
 import { useRouter } from "next/router";
+
 const Register = () => {
-  const router = useRouter();
+  const { push } = useRouter();
 
   const onSubmit = async (values, actions) => {
-    console.log("Submitted Values:", values);
-    await new Promise((resolve) => setTimeout(resolve, 600));
+    try {
+      const res = await axios.post(
+        `${process.env.NEXT_PUBLIC_API_URL}/users/register`,
+        values
+      );
+      if (res.status === 200) {
+        toast.success("User created successfully");
+        push("/auth/login");
+      }
+    } catch (err) {
+      toast.error(err?.response?.data?.message || "Registration failed");
+    }
     actions.resetForm();
   };
 
-  const formik = useFormik({
-    initialValues: {
-      username: "",
-      email: "",
-      password: "",
-      confirmPassword: "",
-    },
-    onSubmit,
-    validationSchema: registerSchema,
-  });
+  const { values, errors, touched, handleSubmit, handleChange, handleBlur } =
+    useFormik({
+      initialValues: {
+        fullName: "",
+        email: "",
+        password: "",
+        confirmPassword: "",
+      },
+      onSubmit,
+      validationSchema: registerSchema,
+    });
 
   const inputs = [
     {
       id: 1,
+      name: "fullName",
       type: "text",
-      name: "username",
-      placeholder: "Enter your username",
-      value: formik.values.username,
-      error: formik.touched.username && formik.errors.username,
+      placeholder: "Your Full Name",
+      value: values.fullName,
+      errorMessage: errors.fullName,
+      touched: touched.fullName,
     },
     {
       id: 2,
-      type: "email",
       name: "email",
-      placeholder: "Enter your email",
-      value: formik.values.email,
-      error: formik.touched.email && formik.errors.email,
+      type: "email",
+      placeholder: "Your Email Address",
+      value: values.email,
+      errorMessage: errors.email,
+      touched: touched.email,
     },
     {
       id: 3,
-      type: "password",
       name: "password",
-      placeholder: "Enter your password",
-      value: formik.values.password,
-      error: formik.touched.password && formik.errors.password,
+      type: "password",
+      placeholder: "Your Password",
+      value: values.password,
+      errorMessage: errors.password,
+      touched: touched.password,
     },
     {
       id: 4,
-      type: "password",
       name: "confirmPassword",
-      placeholder: "Enter your password again",
-      value: formik.values.confirmPassword,
-      error: formik.touched.confirmPassword && formik.errors.confirmPassword,
+      type: "password",
+      placeholder: "Your Password Again",
+      value: values.confirmPassword,
+      errorMessage: errors.confirmPassword,
+      touched: touched.confirmPassword,
     },
   ];
 
@@ -67,23 +84,21 @@ const Register = () => {
           Register
         </Title>
         <form
-          onSubmit={formik.handleSubmit}
+          onSubmit={handleSubmit}
           className="w-full max-w-md mt-4 flex flex-col gap-4"
         >
-          {inputs.map((input) => (
-            <LoginInput
-              key={input.id}
-              type={input.type}
-              name={input.name}
-              placeholder={input.placeholder}
-              value={input.value}
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              error={input.error}
-            />
-          ))}
+          <div className="flex flex-col gap-y-3 w-full">
+            {inputs.map((input) => (
+              <LoginInput
+                key={input.id}
+                {...input}
+                onChange={handleChange}
+                onBlur={handleBlur}
+              />
+            ))}
+          </div>
 
-          <div className="flex flex-col gap-4">
+          <div className="flex flex-col gap-4 w-full mt-6">
             <button
               type="submit"
               className="bg-primary text-white px-6 py-3 rounded-full hover:bg-primary-dark transition"

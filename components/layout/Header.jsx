@@ -6,10 +6,12 @@ import { IoIosCloseCircle } from "react-icons/io";
 import SearchModal from "../ui/SearchModal";
 import { useRouter } from "next/router";
 import Link from "next/link";
+import { useSelector } from "react-redux";
 
 const Header = () => {
   const [isOpenSearch, setIsOpenSearch] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const cart = useSelector((state) => state.cart);
 
   const router = useRouter();
 
@@ -78,7 +80,7 @@ const Header = () => {
                   href="/bookTable"
                   className="hover:underline hover:text-primary text-[14px] md:text-[16px] uppercase"
                 >
-                  Book Table
+                  Reserve
                 </Link>
               </li>
             </ul>
@@ -94,10 +96,14 @@ const Header = () => {
             </Link>
             <Link
               href="/cart"
-              className="flex items-center justify-center px-2 py-2 md:px-3 md:py-2 rounded hover:text-primary"
+              className="relative flex items-center justify-center px-2 py-2 md:px-3 md:py-2 rounded hover:text-primary"
             >
-              <FaShoppingCart />
+              <FaShoppingCart className="-mr-1" />
+              <span className="w-4 h-4 text-xs grid place-content-center rounded-full bg-primary absolute -top-2 -right-3 text-black font-bold">
+                {cart.products.length === 0 ? "0" : cart.products.length}
+              </span>
             </Link>
+
             <button
               onClick={() => setIsOpenSearch(true)}
               className="flex items-center justify-center px-2 py-2 md:px-3 md:py-2 rounded hover:text-primary"
@@ -106,7 +112,7 @@ const Header = () => {
             </button>
             <Link href="/order" className="inline-block">
               <button className="bg-primary btn text-white w-full font-sans px-4 md:px-6 py-1 text-sm md:text-base rounded-full">
-                Order Online
+                Order/Online
               </button>
             </Link>
           </div>
@@ -160,7 +166,7 @@ const Header = () => {
                 className="text-lg hover:text-primary uppercase"
                 onClick={() => setIsMenuOpen(false)}
               >
-                Book Table
+                Reserve
               </Link>
             </li>
             <li>
