@@ -11,7 +11,7 @@ const MenuItem = () => {
       <div className="w-full  bg-[#e0ecf8] h-[210px] grid place-content-center rounded-bl-[46px]  rounded-tl-2xl rounded-tr-2xl">
         <Link href="/product">
         <div className="relative w-36 h-36 hover:scale-110 transition-all">
-          <Image src="/image/size.png" alt="" layout="fill" />
+          <Image src="/image/size.png" alt="" layout="fill" priority  />
         </div>
         </Link>
       </div>

@@ -29,7 +29,8 @@ const AdminProfile = () => {
         }
       }
     } catch (err) {
-      console.error(err);
+      console.error("Logout error:", err);
+      toast.error("Failed to logout. Please try again.");
     }
   };
 
@@ -104,9 +105,33 @@ const AdminProfile = () => {
 };
 
 export const getServerSideProps = (ctx) => {
-  const cookies = cookie.parse(ctx.req?.headers.cookie || "");
+  try {
+    // Cookie'yi analiz et ve token'ı kontrol et
+    const cookies = cookie.parse(ctx.req?.headers.cookie || "");
+    const adminToken = process.env.ADMIN_TOKEN;
 
-  if (cookies.token !== process.env.ADMIN_TOKEN) {
+    // Debugging için loglar
+    console.log("Cookie'ler:", cookies);
+    console.log("Token var mı:", Boolean(cookies.token));
+
+    // Token yoksa veya admin token'ıyla eşleşmiyorsa yönlendir
+    if (!cookies.token || cookies.token.trim() !== adminToken?.trim()) {
+      console.log("Token eşleşmedi, yönlendiriliyor...");
+      return {
+        redirect: {
+          destination: "/admin",
+          permanent: false,
+        },
+      };
+    }
+
+    console.log("Token doğrulandı, sayfaya erişim sağlandı");
+    return {
+      props: {},
+    };
+  } catch (error) {
+    console.error("getServerSideProps hatası:", error);
+    // Hata durumunda da giriş sayfasına yönlendir
     return {
       redirect: {
         destination: "/admin",
@@ -114,10 +139,6 @@ export const getServerSideProps = (ctx) => {
       },
     };
   }
-
-  return {
-    props: {},
-  };
 };
 
 export default AdminProfile;

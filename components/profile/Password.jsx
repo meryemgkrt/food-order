@@ -1,41 +1,90 @@
-import React from "react";
+import React, { useState } from "react";
 import Title from "../ui/Title";
-import LoginInput from "../form/LoginInput";
 import { useFormik } from "formik";
 import passwordSchema from "@/schema/passwordSchema";
+import axios from "axios";
+import { toast } from "react-toastify";
 
-const Password = () => {
+const Password = ({ user }) => {
+  const [loading, setLoading] = useState(false);
+
   const onSubmit = async (values, actions) => {
-    console.log("Submitted Values:", values);
-    await new Promise((resolve) => setTimeout(resolve, 600));
-    actions.resetForm();
+    if (values.password !== values.confirmPassword) {
+      toast.error("Passwords don't match!", {
+        position: "top-right",
+      });
+      return;
+    }
+
+    setLoading(true);
+    try {
+      // Debug için log ekleyelim
+      console.log("Sending password update for user:", user._id);
+
+      // API'ye doğru formatta şifre bilgisini gönderelim
+      const res = await axios.put(
+        `${process.env.NEXT_PUBLIC_API_URL}/users/${user._id}`,
+        {
+          password: values.password,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      console.log("Password update response:", res.data);
+
+      toast.success("Password updated successfully!", {
+        position: "top-right",
+      });
+
+      actions.resetForm();
+    } catch (error) {
+      console.error(
+        "Password update error:",
+        error.response?.data || error.message
+      );
+      toast.error(
+        `Failed to update password: ${
+          error.response?.data?.message || error.message
+        }`,
+        {
+          position: "top-right",
+        }
+      );
+    } finally {
+      setLoading(false);
+    }
   };
 
   const formik = useFormik({
     initialValues: {
-      email: "",
       password: "",
+      confirmPassword: "",
     },
     onSubmit,
-    validationSchema: passwordSchema, // Doğrulama şeması burada kullanılıyor
+    validationSchema: passwordSchema,
+    enableReinitialize: true,
   });
 
   const inputs = [
     {
       id: 1,
-      type: "email",
-      name: "email",
-      placeholder: "Enter your email",
-      value: formik.values.email,
-      error: formik.touched.email && formik.errors.email,
+      type: "password",
+      name: "password",
+      placeholder: "Enter your new password",
+      value: formik.values.password,
+      error: formik.touched.password && formik.errors.password,
     },
     {
       id: 2,
       type: "password",
-      name: "password",
-      placeholder: "Enter your password",
-      value: formik.values.password,
-      error: formik.touched.password && formik.errors.password,
+      name: "confirmPassword",
+      placeholder: "Confirm your new password",
+      value: formik.values.confirmPassword,
+      error: formik.touched.confirmPassword && formik.errors.confirmPassword,
     },
   ];
 
@@ -60,19 +109,21 @@ const Password = () => {
                 }`}
               />
               {input.error && (
-                <span className="text-red-500  text-sm mt-1">{input.error}</span>
+                <span className="text-red-500 text-sm mt-1">{input.error}</span>
               )}
             </div>
           ))}
         </div>
 
-        {/* Buton */}
         <div className="flex justify-start mt-6">
           <button
             type="submit"
-            className="bg-primary text-white px-6 py-2 rounded-full hover:bg-primary-dark transition-all w-full md:w-auto"
+            disabled={loading}
+            className={`bg-primary text-white px-6 py-2 rounded-full hover:bg-primary-dark transition-all w-full md:w-auto ${
+              loading ? "opacity-70" : ""
+            }`}
           >
-            Update
+            {loading ? "Updating..." : "Update Password"}
           </button>
         </div>
       </div>

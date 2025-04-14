@@ -1,7 +1,7 @@
 import * as Yup from "yup";
 
 const accountSchema = Yup.object().shape({
-  username: Yup.string()
+  fullName: Yup.string()
     .min(3, "Username must be at least 3 characters")
     .max(20, "Username can't be longer than 20 characters")
     .required("Username is required"),
@@ -13,7 +13,7 @@ const accountSchema = Yup.object().shape({
     .min(10, "Phone number must be at least 10 digits")
     .max(15, "Phone number can't exceed 15 digits")
     .required("Phone number is required"),
-  adress: Yup.string()
+  address: Yup.string()
     .min(5, "Address must be at least 5 characters")
     .max(100, "Address can't exceed 100 characters")
     .required("Address is required"),

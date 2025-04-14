@@ -8,23 +8,52 @@ import Link from "next/link";
 import { signIn, useSession } from "next-auth/react";
 import { toast } from "react-toastify";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import axios from "axios";
 
 const Login = () => {
   const { data: session } = useSession();
-  const { push } = useRouter();
-  const [currentUser, setCurrentUser] = useState();
+  const router = useRouter();
+  const [loading, setLoading] = useState(false);
 
   const onSubmit = async (values, actions) => {
     const { email, password } = values;
     let options = { redirect: false, email, password };
+    setLoading(true);
+
     try {
       const res = await signIn("credentials", options);
-      actions.resetForm();
-      push("/profile")
+
+      if (res?.error) {
+        toast.error("Invalid email or password!", {
+          position: "top-right",
+        });
+      } else {
+        toast.success("Login successful!", {
+          position: "top-right",
+        });
+
+        const response = await fetch(
+          `${process.env.NEXT_PUBLIC_API_URL}/users`
+        );
+        const users = await response.json();
+        const currentUser = users.find((user) => user.email === email);
+
+        if (currentUser?._id) {
+       session && push(`/profile/${currentUser._id}`);
+        } else {
+          toast.error("User not found in database.");
+        }
+
+        actions.resetForm();
+      }
     } catch (err) {
-      console.log(err);
+      toast.error("An error occurred. Please try again.", {
+        position: "top-right",
+      });
+      console.error(err);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -58,8 +87,17 @@ const Login = () => {
     },
   ];
 
-  const handleClick = () => {
-    window.location.href = "https://github.com/login";
+  const handleGithubLogin = async () => {
+    setLoading(true);
+    try {
+      await signIn("github", { callbackUrl: "/profile" });
+    } catch (err) {
+      toast.error("GitHub login failed. Please try again.", {
+        position: "top-right",
+      });
+      console.error(err);
+      setLoading(false);
+    }
   };
 
   return (
@@ -86,14 +124,20 @@ const Login = () => {
           <div className="flex flex-col gap-4">
             <button
               type="submit"
-              className="bg-primary text-white px-6 py-3 rounded-full hover:bg-primary-dark transition"
+              disabled={loading}
+              className={`bg-primary text-white px-6 py-3 rounded-full hover:bg-primary-dark transition ${
+                loading ? "opacity-70 cursor-not-allowed" : ""
+              }`}
             >
-              Login
+              {loading ? "Logging in..." : "Login"}
             </button>
 
             <button
-              onClick={handleClick}
-              className="bg-secondary flex justify-center items-center gap-2 text-white px-6 py-3 rounded-full hover:bg-primary-dark transition"
+              onClick={handleGithubLogin}
+              disabled={loading}
+              className={`bg-secondary flex justify-center items-center gap-2 text-white px-6 py-3 rounded-full hover:bg-primary-dark transition ${
+                loading ? "opacity-70 cursor-not-allowed" : ""
+              }`}
               type="button"
             >
               <FaGithub className="text-lg" />
@@ -102,7 +146,7 @@ const Login = () => {
 
             <Link href="/auth/register">
               <span className="block text-center text-secondary hover:underline cursor-pointer">
-                Don’t have an account? Register
+                Don't have an account? Register
               </span>
             </Link>
           </div>
@@ -115,13 +159,32 @@ const Login = () => {
 export async function getServerSideProps({ req }) {
   const session = await getSession({ req });
 
-  if (session) {
-    return { redirect: { destination: "/profile", permanent: false } };
+  if (session?.user?.email) {
+    try {
+      const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/users`);
+
+      const users = await res.data; 
+      const user = res.data?.find((user) => user.email === session?.user.email);
+     console.log("User:", user);
+      const currentUser = users.find(
+        (user) => user.email === session.user.email
+      );
+
+      if (currentUser?._id) {
+        return {
+          redirect: {
+            destination: `/profile/${currentUser._id}`,
+            permanent: false,
+          },
+        };
+      }
+    } catch (error) {
+      console.error("❌ Error fetching user in GSSP:", error);
+    }
   }
+
   return {
-    props: {
-      session,
-    },
+    props: {},
   };
 }
 
