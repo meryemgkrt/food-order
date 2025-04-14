@@ -2,6 +2,8 @@ import Title from "../ui/Title";
 import LoginInput from "../form/LoginInput";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const Categories = () => {
   const [inptText, setInptText] = useState("");
@@ -17,11 +19,13 @@ const Categories = () => {
         const res = await axios.get(
           `${process.env.NEXT_PUBLIC_API_URL}/categories`
         );
+        // API'dan gelen tüm kategori bilgilerini kullan
         const categoryTitles = res?.data.map((category) => category.title);
         setCategories(categoryTitles || []);
       } catch (error) {
         console.error("Error fetching categories:", error);
         setCategories([]);
+        toast.error("Kategoriler yüklenemedi!");
       }
     };
     fetchCategories();
@@ -31,16 +35,25 @@ const Categories = () => {
     if (inptText.trim()) {
       if (!categories.includes(inptText.trim())) {
         try {
-          await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/categories`, {
-            title: inptText.trim(),
-          });
+          // Önce API'ya gönder
+          const response = await axios.post(
+            `${process.env.NEXT_PUBLIC_API_URL}/categories`,
+            { title: inptText.trim() }
+          );
 
-          setCategories([...categories, inptText.trim()]);
+          // API'dan dönen tam kategori nesnesini kullan
+          const newCategory = response.data.title;
+
+          // Hem local state'i hem de kategoriler listesini güncelle
+          setCategories([...categories, newCategory]);
           setInptText("");
+          toast.success(`"${newCategory}" kategorisi eklendi!`);
         } catch (error) {
           console.error("Kategori eklenirken hata oluştu:", error);
-          alert("Kategori eklenemedi");
+          toast.error("Kategori eklenemedi!");
         }
+      } else {
+        toast.warning("Bu kategori zaten mevcut!");
       }
     }
   };
@@ -56,19 +69,25 @@ const Categories = () => {
     const categoryToDelete = deleteConfirmModal.category;
 
     try {
+      // Önce API'dan sil
       await axios.delete(`${process.env.NEXT_PUBLIC_API_URL}/categories`, {
         data: { title: categoryToDelete },
       });
 
-      setCategories(
-        categories.filter((category) => category !== categoryToDelete)
+      // Local state'i güncelle
+      const updatedCategories = categories.filter(
+        (category) => category !== categoryToDelete
       );
+      setCategories(updatedCategories);
 
       // Modal'ı kapat
       setDeleteConfirmModal({ isOpen: false, category: null });
+
+      // Toast bildirim
+      toast.success(`"${categoryToDelete}" kategorisi silindi!`);
     } catch (error) {
       console.error("Kategori silinirken hata oluştu:", error);
-      alert("Kategori silinemedi");
+      toast.error("Kategori silinemedi!");
 
       // Hata durumunda da modal'ı kapat
       setDeleteConfirmModal({ isOpen: false, category: null });
@@ -81,6 +100,15 @@ const Categories = () => {
 
   return (
     <div className="p-8 relative">
+      <ToastContainer
+        position="top-right"
+        autoClose={3000}
+        hideProgressBar={false}
+        closeOnClick
+        pauseOnHover
+        theme="light"
+      />
+
       <Title className="text-[32px] md:text-[40px] text-center text-primary font-bold font-dancing">
         Categories
       </Title>
@@ -92,11 +120,11 @@ const Categories = () => {
           value={inptText}
           onChange={(e) => setInptText(e.target.value)}
           placeholder="Add new Category"
-          className="w-full h-10 p-4 pl-3 text-sm placeholder:text-sm border-2 border-primary rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary"
+          className="w-full h-14 p-4 pl-3 text-base placeholder:text-base border-2 border-primary rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary"
         />
         <button
           onClick={handleAddCategory}
-          className="bg-primary text-white px-4 py-2 rounded-full hover:bg-primary-dark transition"
+          className="bg-primary text-white px-6 py-3 rounded-full hover:bg-primary-dark transition text-base"
         >
           Add
         </button>
