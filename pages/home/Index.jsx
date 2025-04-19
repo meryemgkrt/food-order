@@ -8,20 +8,18 @@ import Reservation from '@/components/Reservation'
 import React from 'react'
 
 
-const Index = () => {
+const Index = ({ categoryList }) => {
+  console.log(categoryList)
   return (
     <div className="scrollbar-custom">
-      <Caroucel/>
-      <Campaigns/>
-      <MenuWrapper/>
-      <About/>
-      <Reservation/>
-      <Customer/>
-      
-     
-     
+      <Caroucel />
+      <Campaigns />
+      <MenuWrapper categoryList={categoryList}/>
+      <About />
+      <Reservation />
+      <Customer />
     </div>
-  )
-}
+  );
+};
 
 export default Index

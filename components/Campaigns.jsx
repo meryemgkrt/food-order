@@ -10,8 +10,9 @@ const CampaignItem = ({ imageSrc, title, subtitle, title1 }) => {
           src={imageSrc}
           alt="Campaign"
           fill
-          style={{ objectFit: "cover" }}
-          className="hover:scale-105 transition-transform"
+          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+          className="hover:scale-105 transition-transform object-cover"
+          priority
         />
       </div>
       {/* Yazılar */}

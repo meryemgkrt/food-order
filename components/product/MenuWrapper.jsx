@@ -2,13 +2,12 @@ import { useState } from "react";
 import Title from "../ui/Title";
 import MenuItem from "./MenuItem";
 
-const MenuWrapper = () => {
+const MenuWrapper = ({ categoryList }) => {
+  console.log(categoryList);
   const [activeMenu, setActiveMenu] = useState("");
 
-  const menus = ["All", "Burger", "Pizza", "Pasta", "Fries"];
-
   return (
-    <div className="container mx-auto  mb-16">
+    <div className="container mx-auto mb-16">
       <div className="flex flex-col items-center w-full">
         {/* Title */}
         <Title className="text-center font-dancing text-4xl font-bold text-primary mb-8">
@@ -17,20 +16,20 @@ const MenuWrapper = () => {
 
         {/* Buttons */}
         <div className="flex justify-center gap-3 w-full mt-14 flex-wrap">
-          {menus.map((menu) => (
-            <button
-              key={menu}
-              onClick={() => setActiveMenu(menu)}
-              className={`px-6 py-2 rounded-3xl transition-all 
-              ${
-                activeMenu === menu
-                  ? "bg-secondary text-white"
-                  : "bg-transparent text-black"
-              }`}
-            >
-              {menu}
-            </button>
-          ))}
+          {categoryList &&
+            categoryList.map((category) => (
+              <button
+                key={category._id}
+                className={`${
+                  activeMenu === category.title
+                    ? "bg-yellow-500 text-white"
+                    : "bg-secondary text-white"
+                } px-4 py-2 rounded-full hover:opacity-90 transition`}
+                onClick={() => setActiveMenu(category.title)}
+              >
+                {category.title}
+              </button>
+            ))}
         </div>
       </div>
 
@@ -41,9 +40,9 @@ const MenuWrapper = () => {
         <MenuItem />
         <MenuItem />
       </div>
-      <div className="flex justify-center mt-10 ">
-        <button className="bg-primary text-white px-9 py-2  rounded-full hover:opacity-90 transition">
-            View More
+      <div className="flex justify-center mt-10">
+        <button className="bg-primary text-white px-9 py-2 rounded-full hover:opacity-90 transition">
+          View More
         </button>
       </div>
     </div>

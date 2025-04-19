@@ -101,6 +101,8 @@ const Index = () => {
           alt="Pizza Sizes"
           layout="fill"
           objectFit="contain"
+          fill
+          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
         />
       </div>
 
@@ -128,6 +130,8 @@ const Index = () => {
                 layout="fill"
                 objectFit="contain"
                 className="rounded-full"
+                fill
+                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
               />
               <span className="top-0 font-medium -right-8 absolute bg-primary text-xs px-[5px] rounded-full">
                 Small
@@ -144,6 +148,8 @@ const Index = () => {
                 layout="fill"
                 objectFit="contain"
                 className="rounded-full"
+                fill
+                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
               />
               <span className="top-0 font-medium -right-8 absolute bg-primary text-xs px-[5px] rounded-full">
                 Medium
@@ -160,6 +166,8 @@ const Index = () => {
                 layout="fill"
                 objectFit="contain"
                 className="rounded-full"
+                fill
+                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
               />
               <span className="top-0 font-medium -right-6 absolute bg-primary text-xs px-[8px] rounded-full">
                 Large

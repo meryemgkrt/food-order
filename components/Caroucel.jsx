@@ -30,14 +30,15 @@ const Caroucel = () => {
           src="/image/hero-bg.jpg"
           alt="Fast Food Background"
           fill
-          style={{ objectFit: "cover" }}
+          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 100vw, 100vw"
+          className="object-cover"
           priority
         />
       </div>
 
       <Slider {...settings}>
         <div>
-          <div className="mt-48  text-white flex flex-col items-start gap-y-10">
+          <div className="mt-48 text-white flex flex-col items-start gap-y-10">
             <Title className="text-6xl font-dancing">
               Fast Food Restaurant
             </Title>
@@ -65,7 +66,7 @@ const Caroucel = () => {
           </div>
         </div>
         <div>
-          <div className="relative  text-white top-48 flex flex-col items-start gap-y-10">
+          <div className="relative text-white top-48 flex flex-col items-start gap-y-10">
             <Title className="text-6xl font-dancing">
               Fast Food Restaurant
             </Title>

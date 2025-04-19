@@ -29,10 +29,13 @@ const Cart = () => {
               >
                 <td className="py-4 px-6 font-medium whitespace-nowrap hover:text-white flex items-center gap-x-2 justify-center">
                   <Image
-                    src="/image/f1.png"
+                    src={product.img || "/image/f1.png"}
                     alt="Product Image"
                     width={50}
                     height={50}
+                    className="object-cover"
+                    priority
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                   />
                   <span>{product.name}</span>
                 </td>
@@ -71,15 +74,15 @@ const Cart = () => {
         <div className="mt-6">
           <div className="flex justify-between">
             <b>Subtotal: </b>
-            <span>${cart.total}</span>
+            <span>${cart.total.toFixed(2)}</span>
           </div>
           <div className="flex justify-between mt-2">
             <b>Discount: </b>
-            <span>$0</span>
+            <span>$0.00</span>
           </div>
           <div className="flex justify-between mt-2 font-bold">
             <b>Total: </b>
-            <span>${cart.total}</span>
+            <span>${cart.total.toFixed(2)}</span>
           </div>
         </div>
 

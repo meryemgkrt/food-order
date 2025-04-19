@@ -3,8 +3,8 @@ import Image from "next/image";
 const Order = () => {
   return (
     <div className="overflow-x-auto">
-      <div className="min-h-[calc(100vh_-_433px)] flex  justify-center items-center flex-col p-10  min-w-[1000px]">
-        <div className=" flex items-center flex-1  w-full max-h-28">
+      <div className="min-h-[calc(100vh_-_433px)] flex justify-center items-center flex-col p-10 min-w-[1000px]">
+        <div className="flex items-center flex-1 w-full max-h-28">
           <table className="w-full text-sm text-center text-gray-500">
             <thead className="text-xs text-gray-400 uppercase bg-gray-700">
               <tr>
@@ -41,44 +41,46 @@ const Order = () => {
           </table>
         </div>
         <div className="flex justify-between w-full p-10 bg-primary mt-6">
-          <div className="relative flex flex-col">
+          <div className="relative flex flex-col items-center">
             <Image
               src="/image/paid.png"
-              alt=""
+              alt="Payment"
               width={40}
               height={40}
-              objectFit="contain"
+              className="object-contain"
             />
             <span>Payment</span>
           </div>
-          <div className="relative flex flex-col animate-pulse">
+          <div className="relative flex flex-col items-center animate-pulse">
             <Image
               src="/image/bake.png"
-              alt=""
+              alt="Preparing"
               width={40}
               height={40}
-              objectFit="contain"
+              className="object-contain"
             />
             <span>Preparing</span>
           </div>
-          <div className="relative flex flex-col">
+          <div className="relative flex flex-col items-center">
             <Image
               src="/image/bike.png"
-              alt=""
+              alt="On the way"
               width={40}
               height={40}
-              objectFit="contain"
+              className="object-contain"
             />
             <span>On the way</span>
           </div>
-          <div className="relative flex flex-col">
+          <div className="relative flex flex-col items-center">
             <Image
               src="/image/delivered.png"
-              alt=""
+              alt="Delivered"
               width={40}
               height={40}
-              objectFit="contain"
-            />
+              className="object-contain"
+              priority
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+              />
             <span>Delivered</span>
           </div>
         </div>
