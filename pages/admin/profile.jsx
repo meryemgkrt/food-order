@@ -14,9 +14,13 @@ import Product from "@/components/admin/Product";
 import Orders from "@/components/admin/Orders";
 import Categories from "@/components/admin/Categories";
 import Footer from "@/components/admin/Footer";
+import AddProduct from "@/components/admin/AddProduct";
+import { set } from "mongoose";
 
 const AdminProfile = () => {
   const [tabs, setTabs] = useState(0);
+  const [isProductModal, setIsProductModal] = useState(false);
+  const [isSearchModal, setIsSearchModal] = useState(false);
   const router = useRouter();
 
   const closeAdminAccount = async () => {
@@ -72,6 +76,8 @@ const AdminProfile = () => {
             width={100}
             height={100}
             className="rounded-full object-cover"
+            priority
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
           />
           <b className="text-center text-2xl mt-3">Admin</b>
         </div>
@@ -100,6 +106,13 @@ const AdminProfile = () => {
 
       {/* Content */}
       <div className="lg:col-span-2">{tabList[tabs]?.component}</div>
+      {isProductModal && <AddProduct setIsProductModal={setIsProductModal} />}
+      <button
+        onClick={() => setIsProductModal(true)}
+        className="btn-primary fixed bottom-6 right-6 md:bottom-10 md:right-10 w-12 h-12 p-0 rounded-full flex items-center justify-center text-2xl z-10"
+      >
+        +
+      </button>
     </div>
   );
 };
