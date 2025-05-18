@@ -1,8 +1,44 @@
-import React from 'react'
-import Title from '../ui/Title';
-import Image from 'next/image';
+import React, { useEffect, useState } from "react";
+import Title from "../ui/Title";
+import Image from "next/image";
+import axios from "axios";
+import { toast } from "react-toastify";
 
 const Product = () => {
+  const [products, setProducts] = useState([]);
+
+  const getProducts = async () => {
+    try {
+      const res = await axios.get(
+        `${process.env.NEXT_PUBLIC_API_URL}/products`
+      );
+      setProducts(res.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const productClear = async (id) => {
+    try {
+      if (confirm("Are you sure you want to delete this product?")) {
+        const res = await axios.delete(
+          `${process.env.NEXT_PUBLIC_API_URL}/products/${id}`
+        );
+
+        if (res.status === 200) {
+          toast.success("Product delete");
+          getProducts();
+        }
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    getProducts();
+  }, []);
+
   return (
     <div className="flex-1">
       <div className="p-8">
@@ -31,29 +67,48 @@ const Product = () => {
               </tr>
             </thead>
             <tbody>
-              <tr className="transition-all bg-secondary border-gray-700 hover:bg-primary">
-                <td className="py-4 px-6 font-medium whitespace-nowrap hover:text-white flex items-center gap-x-2 justify-center">
-                 <Image src="/image/f2.png" width={50} height={50} alt="product image" className="rounded-full object-cover" />
-                </td>
-                <td className="py-4 px-6 font-medium whitespace-nowrap hover:text-white">
-                  <span>12333434...</span>
-                </td>
-                <td className="py-4 px-6 font-medium whitespace-nowrap hover:text-white">
-              <span>Goog Burger</span>
-                </td>
-                <td className="py-4 px-6 font-medium whitespace-nowrap hover:text-white">
-                  $44
-                </td>
-                <td className="py-4 px-6 font-medium whitespace-nowrap hover:text-white">
-                  <button className="btn-primary hover:bg-red-600 transition-all ">Delete</button>
-                </td>
-              </tr>
+              {products.length > 0 &&
+                products.map((product) => (
+                  <tr
+                    key={product}
+                    className="transition-all bg-secondary border-gray-700 hover:bg-primary"
+                  >
+                    <td className="py-4 px-6 font-medium whitespace-nowrap hover:text-white flex items-center gap-x-2 justify-center">
+                      <Image
+                        src={product.img}
+                        width={50}
+                        height={50}
+                        alt={product.title}
+                        className="rounded-full object-cover"
+                        priority
+                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                      />
+                    </td>
+                    <td className="py-4 px-6 font-medium whitespace-nowrap hover:text-white">
+                      <span>{product._id.substring(0, 5)} </span>
+                    </td>
+                    <td className="py-4 px-6 font-medium whitespace-nowrap hover:text-white">
+                      <span>{product.title} </span>
+                    </td>
+                    <td className="py-4 px-6 font-medium whitespace-nowrap hover:text-white">
+                      ${product.prices}
+                    </td>
+                    <td className="py-4 px-6 font-medium whitespace-nowrap hover:text-white">
+                      <button
+                        onClick={()=> productClear(product._id)}
+                        className="btn-primary hover:bg-red-600 transition-all "
+                      >
+                        Delete
+                      </button>
+                    </td>
+                  </tr>
+                ))}
             </tbody>
           </table>
         </div>
       </div>
     </div>
   );
-}
+};
 
-export default Product
+export default Product;

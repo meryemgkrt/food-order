@@ -9,7 +9,7 @@ import axios from "axios";
 import Categories from "@/components/admin/Categories";
 config.autoAddCss = false; // Font Awesome'un CSS'ini otomatik eklemesini devre dışı bırakıyoruz
 
-export default function App({ Component, pageProps, categoryList }) {
+export default function App({ Component, pageProps, categoryList, productList }) {
   return (
     <div className="scrollbar-custom">
       <Head>
@@ -23,16 +23,20 @@ export default function App({ Component, pageProps, categoryList }) {
         />
       </Head>
 
-      <Home categoryList={categoryList} />
+      <Home categoryList={categoryList} productList={productList} />
     </div>
   );
 }
 
 export const getServerSideProps =async()=>{
   const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/categories`);
-  return{
-    props:{
-      categoryList:res.data ? res.data : []
-    }
-  }
+  const product = await axios.get(
+    `${process.env.NEXT_PUBLIC_API_URL}/products`
+  ); // Burada düzeltme
+  return {
+    props: {
+      categoryList: res.data ? res.data : [],
+      productList: product.data ? product.data : [],
+    },
+  };
 }
