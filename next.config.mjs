@@ -2,7 +2,18 @@
 const nextConfig = {
   reactStrictMode: true,
   images: {
-    domains: ["res.cloudinary.com"],
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "res.cloudinary.com",
+      },
+    ],
+  },
+  // Logları kapatmak için
+  logging: {
+    fetches: {
+      fullUrl: false,
+    },
   },
 };
 
